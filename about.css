@@ -1,0 +1,85 @@
+.about-hero {
+  padding: 60px 24px 40px;
+  text-align: center;
+  background: radial-gradient(circle at top left, #10192e 0%, #060910 70%);
+}
+.about-hero h1 {
+  font-size: clamp(30px, 5vw, 48px);
+  font-weight: 800;
+  margin-top: 14px;
+  background: linear-gradient(90deg, #6ea8fe, #a685ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+.about-hero p {
+  max-width: 560px;
+  margin: 16px auto 0;
+  color: #8b93a7;
+  font-size: 15px;
+}
+
+.about-section {
+  padding: 44px 24px;
+  max-width: 760px;
+  margin: 0 auto;
+}
+.about-section.alt {
+  max-width: 100%;
+  background: rgba(18, 24, 38, 0.5);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.about-section.alt > * {
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.about-section h2 { font-size: 20px; margin-bottom: 14px; }
+.about-section p { color: #b7c0d4; line-height: 1.7; font-size: 14.5px; }
+.about-list {
+  color: #b7c0d4;
+  line-height: 1.9;
+  font-size: 14.5px;
+  padding-left: 20px;
+}
+.about-list li { margin-bottom: 4px; }
+.about-list b { color: #e8ecf3; }
+
+/* Workflow diagram */
+.workflow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.wf-step {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(110,168,254,0.3);
+  border-radius: 12px;
+  padding: 12px 28px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #e8ecf3;
+  min-width: 220px;
+  text-align: center;
+}
+.wf-step.highlight {
+  background: linear-gradient(90deg, rgba(110,168,254,0.3), rgba(166,133,255,0.3));
+  border-color: #a685ff;
+}
+.wf-arrow { color: #6ea8fe; font-size: 16px; }
+
+/* Concept cards */
+.concept-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+.concept-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 18px;
+}
+.concept-card b { display: block; margin-bottom: 6px; color: #8ab4ff; font-size: 14px; }
+.concept-card p { color: #9aa4b8; font-size: 13px; margin: 0; line-height: 1.6; }

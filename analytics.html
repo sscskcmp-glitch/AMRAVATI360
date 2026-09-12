@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AMRAVATI360 — Analytics</title>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="site-nav-brand">🌐 AMRAVATI360</div>
+  <div class="site-nav-links">
+    <a href="index.html">Home</a>
+    <a href="explore.html">Explore</a>
+    <a href="analytics.html" class="active">Analytics</a>
+    <a href="geoai.html">Ask AI</a>
+    <a href="about.html">About</a>
+  </div>
+</nav>
+
+<div id="app">
+  <header id="topbar">
+    <div class="topbar-brand">
+      <button id="sidebarToggle" class="icon-btn mobile-only" aria-label="Toggle categories">☰</button>
+      <div>
+        <h1>AMRAVATI360</h1>
+        <p class="tagline">Everything About Amravati, One Smart Map.</p>
+      </div>
+    </div>
+
+    <div class="topbar-search">
+      <input id="aiSearchBox" type="text" placeholder="🔎 Ask anything about Amravati…" autocomplete="off" />
+      <div id="aiSearchHint" class="ai-search-hint"></div>
+    </div>
+
+    <div class="topbar-stats">
+      <span id="statLive" class="stat-pill loading">● Loading</span>
+      <span id="statTotal" class="stat-pill">Places: —</span>
+      <span id="statSelected" class="stat-pill">Category: None</span>
+      <span id="statUpdated" class="stat-pill">Updated: —</span>
+    </div>
+
+    <div class="topbar-actions">
+      <button id="assistantToggle" class="assistant-fab" aria-label="Ask Amravati360">🤖 Ask Amravati360</button>
+      <button id="nearMeBtn" class="btn-pill">📍 Near Me</button>
+      <button id="analyticsBtn" class="btn-pill">📊 Analytics</button>
+    </div>
+  </header>
+
+  <div id="body">
+    <aside id="sidebar">
+      <div id="status" class="status loading">Fetching live data from OpenStreetMap…</div>
+
+      <input id="searchBox" type="text" placeholder="🔎 Filter categories…" autocomplete="off" />
+
+      <div class="categories-heading-row">
+        <h2 id="categoriesHeading">Smart City Layers (0)</h2>
+      </div>
+
+      <div id="categoryList"></div>
+
+      <div class="spatial-analysis">
+        <h2>Spatial Analysis</h2>
+        <p class="spatial-hint">Analyzes only the currently selected category.</p>
+        <div class="spatial-buttons">
+          <button id="heatmapToggle" class="chip">🔥 Density Heatmap</button>
+          <button id="clusterToggle" class="chip active">📍 Marker Clusters</button>
+          <button id="accessibilityToggle" class="chip">🎯 Accessibility</button>
+        </div>
+      </div>
+
+      <p class="disclaimer">
+        Data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors.
+        This is crowd-sourced data — counts reflect what volunteers have mapped so far,
+        not a guaranteed 100% real-world census. 13 categories (EV Charging, Hardware Stores,
+        Gyms, Movie Theatres, Fire Stations, Churches, Libraries, Courts, Parking, Bakeries,
+        Clothing Stores, Electronics Stores, Event/Wedding Venues) also include locations
+        manually verified via Google Maps on 2026-09-03.
+      </p>
+    </aside>
+
+    <div id="sidebarScrim" class="sidebar-scrim"></div>
+
+    <main id="map"></main>
+
+    <div id="detailPanel" class="detail-panel">
+      <div class="detail-panel-sticky">
+        <div class="detail-panel-header">
+          <div>
+            <h3 id="detailPanelTitle"></h3>
+            <p id="detailPanelSubtitle" class="detail-panel-subtitle"></p>
+          </div>
+          <button id="detailPanelClose">✕</button>
+        </div>
+        <input id="panelSearchBox" class="panel-search" type="text" placeholder="🔍 Search in this category…" />
+      </div>
+      <div id="detailPanelList" class="detail-panel-list"></div>
+      <div id="recommendationsSection" class="recommendations-section"></div>
+      <div id="routeBar" class="route-bar"></div>
+    </div>
+  </div>
+
+  <div id="assistantPanel" class="assistant-panel">
+    <div class="assistant-header">
+      <h3>🤖 Ask Amravati360</h3>
+      <div class="assistant-header-actions">
+        <button id="assistantClear" class="icon-btn" title="Clear Chat" aria-label="Clear Chat">🗑️</button>
+        <button id="assistantClose">✕</button>
+      </div>
+    </div>
+    <div id="assistantMessages" class="assistant-messages"></div>
+    <form id="assistantForm" class="assistant-form">
+      <input id="assistantInput" type="text" placeholder="Ask a question…" autocomplete="off" />
+      <button type="submit" class="icon-btn">➤</button>
+    </form>
+  </div>
+
+  <div id="analyticsModal" class="modal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>📊 Smart City Analytics</h3>
+        <button id="analyticsClose">✕</button>
+      </div>
+      <div class="modal-body" id="analyticsBody"></div>
+    </div>
+  </div>
+
+  <div id="nearMePanel" class="near-me-panel">
+    <div class="near-me-header">
+      <h3>📍 Near Me</h3>
+      <button id="nearMeClose">✕</button>
+    </div>
+    <div id="nearMeFilters" class="near-me-filters"></div>
+    <div id="nearMeList" class="near-me-list"></div>
+  </div>
+
+  <nav class="mobile-bottom-nav mobile-only">
+    <button data-action="categories">📂<span>Categories</span></button>
+    <button data-action="nearme">📍<span>Near Me</span></button>
+    <button data-action="ai">🤖<span>AI</span></button>
+  </nav>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="categories.js"></script>
+<script src="manual-places.js"></script>
+<script src="geo.js"></script>
+<script src="nlp.js"></script>
+<script src="recommendations.js"></script>
+<script src="app.js"></script>
+<script>
+  window.addEventListener("load", function () {
+    setTimeout(function () {
+      var btn = document.getElementById("analyticsBtn");
+      if (btn) btn.click();
+    }, 1200);
+  });
+</script>
+</body>
+</html>
